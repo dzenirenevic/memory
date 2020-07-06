@@ -25,6 +25,15 @@ public:
         return details::memory::forward_allocate(m_buf, m_size, n, alignment);
     }
 
+    [[nodiscard]] void* reallocate_bytes(
+        void* const p,
+        const size_t n,
+        const size_t new_size,
+        const size_t alignment = alignof(std::max_align_t))
+    {
+        return details::memory::forward_reallocate(m_buf, m_size, p, n, new_size, alignment);
+    }
+
     constexpr void deallocate_bytes(
         void*, size_t, size_t = alignof(std::max_align_t)) const noexcept {}
 

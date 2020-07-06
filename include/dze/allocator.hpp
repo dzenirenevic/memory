@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <cstring>
 #include <new>
 #include <type_traits>
 
@@ -24,13 +25,38 @@ public:
     }
 
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+    [[nodiscard]] void* reallocate_bytes(
+        void* const p,
+        const size_t n,
+        const size_t new_size,
+        const size_t alignment = alignof(std::max_align_t)) const
+    {
+        void* bytes;
+        if (alignment > __STDCPP_DEFAULT_NEW_ALIGNMENT__)
+        {
+            bytes = ::operator new(new_size, std::align_val_t{alignment});
+            std::memcpy(bytes, p, n);
+            ::operator delete(p, n, std::align_val_t{alignment});
+        }
+        else
+        {
+            bytes = ::operator new(new_size);
+            std::memcpy(bytes, p, n);
+            ::operator delete(p, n);
+        }
+        return bytes;
+    }
+
+    // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     void deallocate_bytes(
-        void* const p, const size_t size, const size_t alignment = alignof(std::max_align_t)) const noexcept
+        void* const p,
+        const size_t n,
+        const size_t alignment = alignof(std::max_align_t)) const noexcept
     {
         if (alignment > __STDCPP_DEFAULT_NEW_ALIGNMENT__)
-            ::operator delete(p, size, std::align_val_t{alignment});
+            ::operator delete(p, n, std::align_val_t{alignment});
         else
-            ::operator delete(p, size);
+            ::operator delete(p, n);
     }
 
 private:

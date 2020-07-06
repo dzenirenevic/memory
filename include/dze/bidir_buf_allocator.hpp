@@ -27,6 +27,17 @@ public:
 
     // Undefined behavior if p is not equal to the return value of the last invocation of
     // allocate_bytes on this object.
+    [[nodiscard]] void* reallocate_bytes(
+        void* const p,
+        const size_t n,
+        const size_t new_size,
+        const size_t alignment = alignof(std::max_align_t))
+    {
+        return details::memory::bidir_reallocate(m_buf, m_size, p, n, new_size, alignment);
+    }
+
+    // Undefined behavior if p is not equal to the return value of the last invocation of
+    // allocate_bytes on this object.
     void deallocate_bytes(
         void* const p, const size_t n, const size_t alignment = alignof(std::max_align_t)) noexcept
     {

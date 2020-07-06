@@ -46,6 +46,29 @@ static_assert(
     return buf_nx;
 }
 
+[[nodiscard]] inline void* bidir_reallocate(
+    [[maybe_unused]] void*& buf,
+    size_t& size,
+    void* const p,
+    const size_t n,
+    const size_t new_size,
+    size_t)
+{
+    assert(p == static_cast<std::byte*>(buf) - n);
+
+    if (new_size > n)
+    {
+        if (size < new_size - n)
+            throw std::bad_alloc{};
+
+        size -= new_size - n;
+    }
+    else
+        size += n - new_size;
+
+    return p;
+}
+
 inline void bidir_deallocate(
     void*& buf, size_t& size, void* const p, const size_t n, size_t) noexcept
 {

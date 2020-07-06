@@ -32,6 +32,25 @@ public:
     }
 
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+    [[nodiscard]] void* reallocate_bytes(
+        void* const p,
+        size_t,
+        const size_t new_size,
+        const size_t alignment = alignof(std::max_align_t)) const
+    {
+        void* bytes;
+        if (alignment > __STDCPP_DEFAULT_NEW_ALIGNMENT__)
+            bytes = mi_realloc_aligned(p, new_size, alignment);
+        else
+            bytes = mi_realloc(p, new_size);
+
+        if (bytes == nullptr)
+            throw std::bad_alloc{};
+
+        return bytes;
+    }
+
+    // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     void deallocate_bytes(
         void* const p, size_t, size_t = alignof(std::max_align_t)) const noexcept
     {

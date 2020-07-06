@@ -4,3 +4,4 @@
 #include "forward_buf_resource.hpp"
 #include "mimalloc_resource.hpp"
 #include "polymorphic_allocator.hpp"
+#include "resource.hpp"

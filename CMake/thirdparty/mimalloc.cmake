@@ -10,9 +10,10 @@ add_external_project(
     GIT_SHALLOW true
     PREFIX "${thirdparty_prefix}/${proj_name}"
     SOURCE_DIR "${thirdparty_prefix}/${proj_name}/source"
-    BINARY_DIR "${thirdparty_binary_dir}/${proj_name}/bin")
+    BINARY_DIR "${thirdparty_binary_dir}/${proj_name}/bin"
+    ARGS MI_OVERRIDE=OFF MI_BUILD_TESTS=OFF MI_BUILD_SHARED=OFF MI_BUILD_OBJECT=OFF)
 
 target_compile_options(
-    mimalloc
+    mimalloc-static
     PUBLIC -Wno-pedantic
     PRIVATE -Wno-missing-declarations)

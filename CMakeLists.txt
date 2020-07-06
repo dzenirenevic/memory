@@ -17,7 +17,7 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang" OR
     target_compile_options(dze_memory INTERFACE -fsized-deallocation)
 endif ()
 
-target_link_libraries(dze_memory INTERFACE mimalloc)
+target_link_libraries(dze_memory INTERFACE mimalloc-static)
 
 add_library(dze::memory ALIAS dze_memory)
 
